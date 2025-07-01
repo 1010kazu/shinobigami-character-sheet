@@ -14,35 +14,28 @@
 - **JSON形式でのエクスポート・インポート**（保存・読み込みボタン）
 - **レスポンシブデザイン**（スマホ・PC両対応）
 
-## 実行方法
+## 起動方法
 
-### 1. 必要な環境
-- Node.js（v16以上推奨）
-- npm
+### Dockerを使う場合（推奨）
+1. イメージをビルド
+    ```bash
+    docker build -t shinobigami-character-sheet .
+    ```
+2. コンテナを起動
+    ```bash
+    docker run --rm -p 3000:3000 shinobigami-character-sheet
+    ```
+3. ブラウザで [http://localhost:3000](http://localhost:3000) を開く
 
-### 2. セットアップ
-```bash
-# リポジトリをクローン
-$ git clone git@github.com:1010kazu/shinobigami-character-sheet.git
-$ cd shinobigami-character-sheet
-
-# 依存パッケージをインストール
-$ npm install
-```
-
-### 3. 開発サーバーの起動
-```bash
-$ npm start
-```
-
-- ブラウザで `http://localhost:3000` を開くとキャラクターシートが利用できます。
-
-### 4. 本番ビルド
-```bash
-$ npm run build
-```
-
-- `build/` ディレクトリに本番用ファイルが出力されます。
+### ローカルで直接起動する場合
+1. 依存パッケージをインストール
+    ```bash
+    npm install
+    ```
+2. 開発サーバーを起動
+    ```bash
+    npm start
+    ```
 
 ## ディレクトリ構成
 ```
@@ -50,13 +43,16 @@ shinobigami-character-sheet/
 ├── src/
 │   ├── components/         # Reactコンポーネント
 │   ├── types/              # 型定義
-│   ├── App.tsx             # エントリポイント
 │   └── ...
 ├── public/
 ├── package.json
-├── README.md
+├── Dockerfile
+├── .dockerignore
 └── ...
 ```
+
+## ライセンス
+MIT
 
 ---
 
