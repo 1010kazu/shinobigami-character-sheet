@@ -1,6 +1,10 @@
 export interface Character {
   // 基本情報
   name: string;
+  playerName: string; // プレイヤー名
+  rival: string;      // 仇敵
+  rank: string;       // 階級
+  achievement: number; // 功績
   school: string;
   secret: string;
   publicFace: string;

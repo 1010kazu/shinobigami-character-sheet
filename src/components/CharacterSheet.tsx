@@ -30,6 +30,10 @@ import { Character } from '../types/character';
 const CharacterSheet: React.FC = () => {
   const [character, setCharacter] = useState<Character>({
     name: '',
+    playerName: '',
+    rival: '',
+    rank: '',
+    achievement: 0,
     school: '',
     secret: '',
     publicFace: '',
@@ -152,6 +156,40 @@ const CharacterSheet: React.FC = () => {
                 value={character.name}
                 onChange={(e) => setCharacter(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="キャラクター名"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>プレイヤー名</Label>
+              <Input
+                value={character.playerName}
+                onChange={(e) => setCharacter(prev => ({ ...prev, playerName: e.target.value }))}
+                placeholder="プレイヤー名"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>仇敵</Label>
+              <Input
+                value={character.rival}
+                onChange={(e) => setCharacter(prev => ({ ...prev, rival: e.target.value }))}
+                placeholder="仇敵"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>階級</Label>
+              <Input
+                value={character.rank}
+                onChange={(e) => setCharacter(prev => ({ ...prev, rank: e.target.value }))}
+                placeholder="階級"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>功績</Label>
+              <Input
+                type="number"
+                min="0"
+                value={character.achievement}
+                onChange={(e) => setCharacter(prev => ({ ...prev, achievement: Number(e.target.value) }))}
+                placeholder="功績"
               />
             </FormGroup>
             <FormGroup>
