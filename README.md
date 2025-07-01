@@ -1,46 +1,66 @@
-# Getting Started with Create React App
+# シノビガミ公式風キャラクターシート
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+このリポジトリは、TRPG「シノビガミ」用のキャラクターシートをWebブラウザ上で作成・管理できるReact + TypeScript製のアプリケーションです。公式シート風のデザインで、直感的な操作が可能です。
 
-## Available Scripts
+## 主な機能
+- **基本情報の入力**（名前、流派、秘密、表の顔、年齢、性別、居所）
+- **能力値の設定**（体術・忍術・妖術・謀術・戦術・器術）
+  - 公式シート風の欄をクリックして数値を設定
+- **生命力の管理**（現在値・最大値）
+- **忍法の管理**（追加・削除・編集）
+- **忍具の管理**（追加・削除・編集）
+- **備考欄**（自由記述）
+- **ローカル保存**（自動保存）
+- **JSON形式でのエクスポート・インポート**（保存・読み込みボタン）
+- **レスポンシブデザイン**（スマホ・PC両対応）
 
-In the project directory, you can run:
+## 実行方法
 
-### `npm start`
+### 1. 必要な環境
+- Node.js（v16以上推奨）
+- npm
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 2. セットアップ
+```bash
+# リポジトリをクローン
+$ git clone git@github.com:1010kazu/shinobigami-character-sheet.git
+$ cd shinobigami-character-sheet
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# 依存パッケージをインストール
+$ npm install
+```
 
-### `npm test`
+### 3. 開発サーバーの起動
+```bash
+$ npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- ブラウザで `http://localhost:3000` を開くとキャラクターシートが利用できます。
 
-### `npm run build`
+### 4. 本番ビルド
+```bash
+$ npm run build
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `build/` ディレクトリに本番用ファイルが出力されます。
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ディレクトリ構成
+```
+shinobigami-character-sheet/
+├── src/
+│   ├── components/         # Reactコンポーネント
+│   ├── types/              # 型定義
+│   ├── App.tsx             # エントリポイント
+│   └── ...
+├── public/
+├── package.json
+├── README.md
+└── ...
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+### 作者
+- [1010kazu (GitHub)](https://github.com/1010kazu)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
