@@ -8,19 +8,23 @@ export interface AbilityCell {
   selected: boolean;
 }
 
+export type School = '斜歯忍軍' | '鞍馬神流' | 'ハグレモノ' | '比良坂機関' | '私立御斎学園' | '隠忍の血統';
+export type Creed = '凶' | '律' | '我' | '情' | '忠' | '和';
+
 export interface Character {
   // 基本情報
   name: string;
   playerName: string; // プレイヤー名
-  rival: string;      // 仇敵
-  rank: string;       // 階級
-  achievement: number; // 功績
-  school: string;
-  secret: string;
-  publicFace: string;
   age: number;
   gender: string;
-  location: string;
+  school: School;
+  rank: string;
+  style: string; // 流儀
+  publicFace: string;
+  creed: Creed;
+  achievement: number;
+  background: string;
+  rival: string; // 仇敵（自動入力）
   
   // 能力値
   abilityTable: AbilityCell[][]; // 12行6列の表

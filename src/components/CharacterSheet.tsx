@@ -20,7 +20,7 @@ import {
 } from './styled/CharacterSheet';
 import NinpoManager from './NinpoManager';
 import NinjaToolManager from './NinjaToolManager';
-import { Character } from '../types/character';
+import { Character, School, Creed } from '../types/character';
 import AbilityTable from './AbilityTable';
 
 // AbilityTableの初期化関数
@@ -43,19 +43,31 @@ const createInitialAbilityTable = () => {
   );
 };
 
+const SCHOOL_OPTIONS: School[] = ['斜歯忍軍', '鞍馬神流', 'ハグレモノ', '比良坂機関', '私立御斎学園', '隠忍の血統'];
+const CREED_OPTIONS: Creed[] = ['凶', '律', '我', '情', '忠', '和'];
+const RIVAL_MAP: Record<School, string> = {
+  '斜歯忍軍': '鞍馬神流',
+  '鞍馬神流': '隠忍の血統',
+  'ハグレモノ': '斜歯忍軍',
+  '比良坂機関': '私立御斎学園',
+  '私立御斎学園': 'ハグレモノ',
+  '隠忍の血統': '比良坂機関',
+};
+
 const CharacterSheet: React.FC = () => {
   const [character, setCharacter] = useState<Character>({
     name: '',
     playerName: '',
-    rival: '',
-    rank: '',
-    achievement: 0,
-    school: '',
-    secret: '',
-    publicFace: '',
     age: 0,
     gender: '',
-    location: '',
+    school: '斜歯忍軍',
+    rank: '',
+    style: '',
+    publicFace: '',
+    creed: '凶',
+    achievement: 0,
+    background: '',
+    rival: RIVAL_MAP['斜歯忍軍'],
     abilityTable: createInitialAbilityTable(),
     ninpo: [],
     ninjaTools: { hyorogan: 0, jintsugan: 0, tonkofu: 0 },
@@ -126,6 +138,15 @@ const CharacterSheet: React.FC = () => {
     }
   };
 
+  // 流派選択時に仇敵を自動入力
+  const handleSchoolChange = (school: School) => {
+    setCharacter(prev => ({
+      ...prev,
+      school,
+      rival: RIVAL_MAP[school],
+    }));
+  };
+
   return (
     <CharacterSheetContainer>
       <SheetHeader>
@@ -154,56 +175,6 @@ const CharacterSheet: React.FC = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label>仇敵</Label>
-              <Input
-                value={character.rival}
-                onChange={(e) => setCharacter(prev => ({ ...prev, rival: e.target.value }))}
-                placeholder="仇敵"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>階級</Label>
-              <Input
-                value={character.rank}
-                onChange={(e) => setCharacter(prev => ({ ...prev, rank: e.target.value }))}
-                placeholder="階級"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>功績</Label>
-              <Input
-                type="number"
-                min="0"
-                value={character.achievement}
-                onChange={(e) => setCharacter(prev => ({ ...prev, achievement: Number(e.target.value) }))}
-                placeholder="功績"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>流派</Label>
-              <Input
-                value={character.school}
-                onChange={(e) => setCharacter(prev => ({ ...prev, school: e.target.value }))}
-                placeholder="流派名"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>秘密</Label>
-              <Input
-                value={character.secret}
-                onChange={(e) => setCharacter(prev => ({ ...prev, secret: e.target.value }))}
-                placeholder="秘密"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>表の顔</Label>
-              <Input
-                value={character.publicFace}
-                onChange={(e) => setCharacter(prev => ({ ...prev, publicFace: e.target.value }))}
-                placeholder="表の顔"
-              />
-            </FormGroup>
-            <FormGroup>
               <Label>年齢</Label>
               <Input
                 type="number"
@@ -221,12 +192,75 @@ const CharacterSheet: React.FC = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label>居所</Label>
+              <Label>流派</Label>
+              <select
+                value={character.school}
+                onChange={(e) => handleSchoolChange(e.target.value as School)}
+                style={{ padding: '10px', borderRadius: '5px', border: '2px solid #bdc3c7', fontSize: '1rem' }}
+              >
+                {SCHOOL_OPTIONS.map((school) => (
+                  <option key={school} value={school}>{school}</option>
+                ))}
+              </select>
+            </FormGroup>
+            <FormGroup>
+              <Label>階級</Label>
               <Input
-                value={character.location}
-                onChange={(e) => setCharacter(prev => ({ ...prev, location: e.target.value }))}
-                placeholder="居所"
+                value={character.rank}
+                onChange={(e) => setCharacter(prev => ({ ...prev, rank: e.target.value }))}
+                placeholder="階級"
               />
+            </FormGroup>
+            <FormGroup>
+              <Label>流儀</Label>
+              <Input
+                value={character.style}
+                onChange={(e) => setCharacter(prev => ({ ...prev, style: e.target.value }))}
+                placeholder="流儀"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>表の顔</Label>
+              <Input
+                value={character.publicFace}
+                onChange={(e) => setCharacter(prev => ({ ...prev, publicFace: e.target.value }))}
+                placeholder="表の顔"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>信念</Label>
+              <select
+                value={character.creed}
+                onChange={(e) => setCharacter(prev => ({ ...prev, creed: e.target.value as Creed }))}
+                style={{ padding: '10px', borderRadius: '5px', border: '2px solid #bdc3c7', fontSize: '1rem' }}
+              >
+                {CREED_OPTIONS.map((creed) => (
+                  <option key={creed} value={creed}>{creed}</option>
+                ))}
+              </select>
+            </FormGroup>
+            <FormGroup>
+              <Label>功績</Label>
+              <Input
+                type="number"
+                min="0"
+                value={character.achievement}
+                onChange={(e) => setCharacter(prev => ({ ...prev, achievement: Number(e.target.value) }))}
+                placeholder="功績"
+              />
+            </FormGroup>
+            <FormGroup style={{ gridColumn: '1 / -1' }}>
+              <Label>背景</Label>
+              <TextArea
+                value={character.background}
+                onChange={(e) => setCharacter(prev => ({ ...prev, background: e.target.value }))}
+                placeholder="背景を入力してください"
+                style={{ minHeight: '120px' }}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>仇敵</Label>
+              <Input value={character.rival} readOnly style={{ background: '#eee' }} />
             </FormGroup>
           </FormGrid>
         </Section>
