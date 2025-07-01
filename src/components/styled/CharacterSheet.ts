@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const CharacterSheetContainer = styled.div`
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   background: #f5f5f5;
@@ -61,9 +60,16 @@ export const SectionTitle = styled.h2`
 
 export const FormGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   margin-bottom: 20px;
+
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
 `;
 
 export const FormGroup = styled.div`
@@ -281,4 +287,20 @@ export const ModalButtons = styled.div`
   gap: 10px;
   justify-content: center;
   margin-top: 20px;
+`;
+
+export const AbilityTableWrapper = styled.div`
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow-x: auto;
+  background: #fff;
+`;
+
+export const NinjaToolCenter = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 10px 0;
+  flex-wrap: wrap;
 `; 
