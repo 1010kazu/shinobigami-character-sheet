@@ -54,6 +54,15 @@ const RIVAL_MAP: Record<School, string> = {
   '隠忍の血統': '比良坂機関',
 };
 
+const STYLE_MAP: Record<School, string> = {
+  '斜歯忍軍': '他の流派の「奥義内容」を集める',
+  '鞍馬神流': 'シノビガミの復活を阻止する',
+  'ハグレモノ': '誰にも縛られず、自分の意志で戦う',
+  '比良坂機関': '日本の国益を守る',
+  '私立御斎学園': '誰かの秘密を探す',
+  '隠忍の血統': 'シノビガミ復活に関する情報を入手する',
+};
+
 const CharacterSheet: React.FC = () => {
   const [character, setCharacter] = useState<Character>({
     name: '',
@@ -61,8 +70,8 @@ const CharacterSheet: React.FC = () => {
     age: 0,
     gender: '',
     school: '斜歯忍軍',
-    rank: '',
-    style: '',
+    rank: '中忍',
+    style: STYLE_MAP['斜歯忍軍'],
     publicFace: '',
     creed: '凶',
     achievement: 0,
@@ -138,12 +147,13 @@ const CharacterSheet: React.FC = () => {
     }
   };
 
-  // 流派選択時に仇敵を自動入力
+  // 流派選択時に仇敵と流儀を自動入力
   const handleSchoolChange = (school: School) => {
     setCharacter(prev => ({
       ...prev,
       school,
       rival: RIVAL_MAP[school],
+      style: STYLE_MAP[school],
     }));
   };
 
@@ -215,9 +225,15 @@ const CharacterSheet: React.FC = () => {
               <Label>流儀</Label>
               <Input
                 value={character.style}
+                readOnly
+                style={{ background: '#eee' }}
                 onChange={(e) => setCharacter(prev => ({ ...prev, style: e.target.value }))}
                 placeholder="流儀"
               />
+            </FormGroup>
+            <FormGroup>
+              <Label>仇敵</Label>
+              <Input value={character.rival} readOnly style={{ background: '#eee' }} />
             </FormGroup>
             <FormGroup>
               <Label>表の顔</Label>
@@ -257,10 +273,6 @@ const CharacterSheet: React.FC = () => {
                 placeholder="背景を入力してください"
                 style={{ minHeight: '120px' }}
               />
-            </FormGroup>
-            <FormGroup>
-              <Label>仇敵</Label>
-              <Input value={character.rival} readOnly style={{ background: '#eee' }} />
             </FormGroup>
           </FormGrid>
         </Section>
