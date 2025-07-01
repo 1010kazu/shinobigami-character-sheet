@@ -51,9 +51,6 @@ shinobigami-character-sheet/
 └── ...
 ```
 
-## ライセンス
-MIT
-
 ---
 
 ### 作者
