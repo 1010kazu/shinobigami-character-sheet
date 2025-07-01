@@ -1,80 +1,46 @@
-import React, { useState } from 'react';
-import { NinpoList, NinpoCard, NinpoName, NinpoDescription, NinpoCost, Button, DangerButton, FormGroup, Label, Input, TextArea } from './styled/CharacterSheet';
+import React from 'react';
 import { NinjaTool } from '../types/character';
+import { FormGroup, Label, Input } from './styled/CharacterSheet';
 
 interface NinjaToolManagerProps {
-  ninjaTools: NinjaTool[];
-  onUpdate: (ninjaTools: NinjaTool[]) => void;
+  ninjaTools: NinjaTool;
+  onUpdate: (ninjaTools: NinjaTool) => void;
 }
 
 const NinjaToolManager: React.FC<NinjaToolManagerProps> = ({ ninjaTools, onUpdate }) => {
-  const [isAdding, setIsAdding] = useState(false);
-  const [newTool, setNewTool] = useState<Partial<NinjaTool>>({});
-
-  const handleAdd = () => {
-    if (newTool.name && newTool.description !== undefined && newTool.quantity !== undefined) {
-      onUpdate([...ninjaTools, newTool as NinjaTool]);
-      setNewTool({});
-      setIsAdding(false);
-    }
-  };
-
-  const handleDelete = (index: number) => {
-    const updatedTools = ninjaTools.filter((_, i) => i !== index);
-    onUpdate(updatedTools);
+  const handleChange = (key: keyof NinjaTool, value: number) => {
+    onUpdate({ ...ninjaTools, [key]: value });
   };
 
   return (
-    <div>
-      <NinpoList>
-        {ninjaTools.map((tool, index) => (
-          <NinpoCard key={index}>
-            <NinpoName>{tool.name}</NinpoName>
-            <NinpoDescription>{tool.description}</NinpoDescription>
-            <NinpoCost>数量: {tool.quantity}</NinpoCost>
-            <DangerButton onClick={() => handleDelete(index)}>削除</DangerButton>
-          </NinpoCard>
-        ))}
-      </NinpoList>
-
-      {isAdding ? (
-        <div style={{ marginTop: '20px', padding: '20px', border: '2px solid #bdc3c7', borderRadius: '8px' }}>
-          <FormGroup>
-            <Label>忍具名</Label>
-            <Input
-              value={newTool.name || ''}
-              onChange={(e) => setNewTool({ ...newTool, name: e.target.value })}
-              placeholder="忍具名を入力"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>説明</Label>
-            <TextArea
-              value={newTool.description || ''}
-              onChange={(e) => setNewTool({ ...newTool, description: e.target.value })}
-              placeholder="忍具の説明を入力"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>数量</Label>
-            <Input
-              type="number"
-              min="0"
-              value={newTool.quantity || ''}
-              onChange={(e) => setNewTool({ ...newTool, quantity: Number(e.target.value) })}
-              placeholder="数量を入力"
-            />
-          </FormGroup>
-          <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-            <Button onClick={handleAdd}>追加</Button>
-            <Button onClick={() => setIsAdding(false)}>キャンセル</Button>
-          </div>
-        </div>
-      ) : (
-        <Button onClick={() => setIsAdding(true)} style={{ marginTop: '15px' }}>
-          忍具を追加
-        </Button>
-      )}
+    <div style={{ display: 'flex', gap: '30px', margin: '10px 0' }}>
+      <FormGroup>
+        <Label>兵糧丸</Label>
+        <Input
+          type="number"
+          min="0"
+          value={ninjaTools.hyorogan}
+          onChange={e => handleChange('hyorogan', Number(e.target.value))}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Label>神通丸</Label>
+        <Input
+          type="number"
+          min="0"
+          value={ninjaTools.jintsugan}
+          onChange={e => handleChange('jintsugan', Number(e.target.value))}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Label>遁甲符</Label>
+        <Input
+          type="number"
+          min="0"
+          value={ninjaTools.tonkofu}
+          onChange={e => handleChange('tonkofu', Number(e.target.value))}
+        />
+      </FormGroup>
     </div>
   );
 };

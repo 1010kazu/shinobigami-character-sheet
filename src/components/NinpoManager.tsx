@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { NinpoList, NinpoCard, NinpoName, NinpoDescription, NinpoCost, Button, DangerButton, FormGroup, Label, Input, TextArea } from './styled/CharacterSheet';
-import { Ninpo } from '../types/character';
+import { Ninpo, NinpoType } from '../types/character';
+import { NinpoList, NinpoCard, NinpoName, NinpoCost, Button, DangerButton, FormGroup, Label, Input, TextArea } from './styled/CharacterSheet';
+
+const NINPO_TYPES: NinpoType[] = ['攻撃', 'サポート', '装備'];
 
 interface NinpoManagerProps {
   ninpo: Ninpo[];
@@ -12,7 +14,14 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
   const [newNinpo, setNewNinpo] = useState<Partial<Ninpo>>({});
 
   const handleAdd = () => {
-    if (newNinpo.name && newNinpo.description !== undefined && newNinpo.cost !== undefined) {
+    if (
+      newNinpo.name &&
+      newNinpo.type &&
+      newNinpo.skill &&
+      newNinpo.range !== undefined &&
+      newNinpo.cost !== undefined &&
+      newNinpo.effect
+    ) {
       onUpdate([...ninpo, newNinpo as Ninpo]);
       setNewNinpo({});
       setIsAdding(false);
@@ -30,8 +39,11 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
         {ninpo.map((n, index) => (
           <NinpoCard key={index}>
             <NinpoName>{n.name}</NinpoName>
-            <NinpoDescription>{n.description}</NinpoDescription>
+            <div>タイプ: {n.type}</div>
+            <div>指定特技: {n.skill}</div>
+            <div>間合い: {n.range}</div>
             <NinpoCost>コスト: {n.cost}</NinpoCost>
+            <div>効果: {n.effect}</div>
             <DangerButton onClick={() => handleDelete(index)}>削除</DangerButton>
           </NinpoCard>
         ))}
@@ -48,11 +60,34 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
             />
           </FormGroup>
           <FormGroup>
-            <Label>説明</Label>
-            <TextArea
-              value={newNinpo.description || ''}
-              onChange={(e) => setNewNinpo({ ...newNinpo, description: e.target.value })}
-              placeholder="忍法の説明を入力"
+            <Label>タイプ</Label>
+            <select
+              value={newNinpo.type || ''}
+              onChange={(e) => setNewNinpo({ ...newNinpo, type: e.target.value as NinpoType })}
+              style={{ padding: '10px', borderRadius: '5px', border: '2px solid #bdc3c7', fontSize: '1rem' }}
+            >
+              <option value="">選択してください</option>
+              {NINPO_TYPES.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </FormGroup>
+          <FormGroup>
+            <Label>指定特技</Label>
+            <Input
+              value={newNinpo.skill || ''}
+              onChange={(e) => setNewNinpo({ ...newNinpo, skill: e.target.value })}
+              placeholder="指定特技を入力"
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>間合い</Label>
+            <Input
+              type="number"
+              min="0"
+              value={newNinpo.range || ''}
+              onChange={(e) => setNewNinpo({ ...newNinpo, range: Number(e.target.value) })}
+              placeholder="間合いを入力"
             />
           </FormGroup>
           <FormGroup>
@@ -63,6 +98,14 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
               value={newNinpo.cost || ''}
               onChange={(e) => setNewNinpo({ ...newNinpo, cost: Number(e.target.value) })}
               placeholder="コストを入力"
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>効果</Label>
+            <TextArea
+              value={newNinpo.effect || ''}
+              onChange={(e) => setNewNinpo({ ...newNinpo, effect: e.target.value })}
+              placeholder="効果を入力"
             />
           </FormGroup>
           <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>

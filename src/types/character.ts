@@ -1,3 +1,13 @@
+export type AbilityName =
+  | '器術' | '体術' | '忍術' | '謀術' | '戦術' | '妖術';
+
+export interface AbilityCell {
+  row: number;
+  col: number;
+  label: string;
+  selected: boolean;
+}
+
 export interface Character {
   // 基本情報
   name: string;
@@ -13,14 +23,7 @@ export interface Character {
   location: string;
   
   // 能力値
-  stats: {
-    taijutsu: number;    // 体術
-    ninjutsu: number;    // 忍術
-    onmyojutsu: number;  // 妖術
-    boujutsu: number;    // 謀術
-    senjutsu: number;    // 戦術
-    kijutsu: number;     // 器術
-  };
+  abilityTable: AbilityCell[][]; // 12行6列の表
   
   // 生命力
   lifePoints: number;
@@ -30,26 +33,31 @@ export interface Character {
   ninpo: Ninpo[];
   
   // 忍具
-  ninjaTools: NinjaTool[];
+  ninjaTools: NinjaTool;
   
   // 備考
   notes: string;
 }
 
+export type NinpoType = '攻撃' | 'サポート' | '装備';
+
 export interface Ninpo {
   name: string;
-  description: string;
+  type: NinpoType;
+  skill: string;
+  range: number;
   cost: number;
+  effect: string;
 }
 
 export interface NinjaTool {
-  name: string;
-  description: string;
-  quantity: number;
+  hyorogan: number;   // 兵糧丸
+  jintsugan: number; // 神通丸
+  tonkofu: number;    // 遁甲符
 }
 
 export interface StatModifier {
-  stat: keyof Character['stats'];
+  stat: string;
   value: number;
   source: string;
 } 

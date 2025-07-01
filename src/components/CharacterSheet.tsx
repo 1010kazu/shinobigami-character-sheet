@@ -11,10 +11,6 @@ import {
   Label,
   Input,
   TextArea,
-  StatsGrid,
-  StatBox,
-  StatName,
-  StatValue,
   LifePointsSection,
   LifePointsBox,
   LifePointsLabel,
@@ -22,10 +18,30 @@ import {
   Button,
   ButtonGroup
 } from './styled/CharacterSheet';
-import StatModal from './StatModal';
 import NinpoManager from './NinpoManager';
 import NinjaToolManager from './NinjaToolManager';
 import { Character } from '../types/character';
+import AbilityTable from './AbilityTable';
+
+// AbilityTableの初期化関数
+const createInitialAbilityTable = () => {
+  const labels = [
+    ['絡繰術', '騎乗術', '生存術', '医術', '兵糧術', '異形化'],
+    ['火術', '砲術', '潜伏術', '毒術', '鳥獣術', '召喚術'],
+    ['水術', '手裏剣術', '遁走術', '罠術', '野戦術', '死霊術'],
+    ['針術', '手練', '盗聴術', '調査術', '地の利', '結界術'],
+    ['仕込み', '身体操術', '腹話術', '詐術', '意気', '封術'],
+    ['衣装術', '歩法', '隠形術', '対人術', '用兵術', '言霊術'],
+    ['縄術', '走法', '変装術', '遊芸', '記憶術', '幻術'],
+    ['登術', '飛術', '香術', '九ノ一の術', '見敵術', '瞳術'],
+    ['拷問術', '骨法術', '分身の術', '傀儡の術', '暗号術', '千里眼の術'],
+    ['壊器術', '刀術', '隠蔽術', '流言の術', '伝達術', '憑依術'],
+    ['掘削術', '怪力', '第六感', '経済力', '人脈', '呪術'],
+  ];
+  return labels.map((row, rowIdx) =>
+    row.map((label, colIdx) => ({ row: rowIdx, col: colIdx, label, selected: false }))
+  );
+};
 
 const CharacterSheet: React.FC = () => {
   const [character, setCharacter] = useState<Character>({
@@ -40,30 +56,15 @@ const CharacterSheet: React.FC = () => {
     age: 0,
     gender: '',
     location: '',
-    stats: {
-      taijutsu: 0,
-      ninjutsu: 0,
-      onmyojutsu: 0,
-      boujutsu: 0,
-      senjutsu: 0,
-      kijutsu: 0
-    },
+    abilityTable: createInitialAbilityTable(),
     lifePoints: 0,
     maxLifePoints: 0,
     ninpo: [],
-    ninjaTools: [],
+    ninjaTools: { hyorogan: 0, jintsugan: 0, tonkofu: 0 },
     notes: ''
   });
 
-  const [modalState, setModalState] = useState<{
-    isOpen: boolean;
-    statName: string;
-    statKey: keyof Character['stats'];
-  }>({
-    isOpen: false,
-    statName: '',
-    statKey: 'taijutsu'
-  });
+  const [selectedHeader, setSelectedHeader] = useState<number | null>(null);
 
   // ローカルストレージからデータを読み込み
   useEffect(() => {
@@ -82,22 +83,19 @@ const CharacterSheet: React.FC = () => {
     localStorage.setItem('shinobigami-character', JSON.stringify(character));
   }, [character]);
 
-  const handleStatClick = (statName: string, statKey: keyof Character['stats']) => {
-    setModalState({
-      isOpen: true,
-      statName,
-      statKey
+  // 能力値セルの選択/解除
+  const handleAbilityToggle = (row: number, col: number) => {
+    setCharacter(prev => {
+      const newTable = prev.abilityTable.map(r => r.map(c => ({ ...c })));
+      newTable[row][col].selected = !newTable[row][col].selected;
+      // 最大生命力を再計算
+      const maxLife = newTable.flat().filter(cell => cell.selected).length;
+      return { ...prev, abilityTable: newTable, maxLifePoints: maxLife };
     });
   };
 
-  const handleStatSave = (value: number) => {
-    setCharacter(prev => ({
-      ...prev,
-      stats: {
-        ...prev.stats,
-        [modalState.statKey]: value
-      }
-    }));
+  const handleHeaderClick = (col: number) => {
+    setSelectedHeader(prev => (prev === col ? null : col));
   };
 
   const handleSave = () => {
@@ -128,15 +126,6 @@ const CharacterSheet: React.FC = () => {
       };
       reader.readAsText(file);
     }
-  };
-
-  const statNames = {
-    taijutsu: '体術',
-    ninjutsu: '忍術',
-    onmyojutsu: '妖術',
-    boujutsu: '謀術',
-    senjutsu: '戦術',
-    kijutsu: '器術'
   };
 
   return (
@@ -246,18 +235,13 @@ const CharacterSheet: React.FC = () => {
 
         {/* 能力値 */}
         <Section>
-          <SectionTitle>能力値（クリックして設定）</SectionTitle>
-          <StatsGrid>
-            {Object.entries(statNames).map(([key, name]) => (
-              <StatBox
-                key={key}
-                onClick={() => handleStatClick(name, key as keyof Character['stats'])}
-              >
-                <StatName>{name}</StatName>
-                <StatValue>{character.stats[key as keyof Character['stats']]}</StatValue>
-              </StatBox>
-            ))}
-          </StatsGrid>
+          <SectionTitle>能力値（表から選択）</SectionTitle>
+          <AbilityTable
+            table={character.abilityTable}
+            onToggle={handleAbilityToggle}
+            selectedHeader={selectedHeader}
+            onHeaderClick={handleHeaderClick}
+          />
         </Section>
 
         {/* 生命力 */}
@@ -283,7 +267,8 @@ const CharacterSheet: React.FC = () => {
                 type="number"
                 min="0"
                 value={character.maxLifePoints}
-                onChange={(e) => setCharacter(prev => ({ ...prev, maxLifePoints: Number(e.target.value) }))}
+                readOnly
+                style={{ background: '#eee' }}
               />
             </FormGroup>
           </LifePointsSection>
@@ -336,14 +321,6 @@ const CharacterSheet: React.FC = () => {
           </ButtonGroup>
         </Section>
       </SheetContent>
-
-      <StatModal
-        isOpen={modalState.isOpen}
-        onClose={() => setModalState(prev => ({ ...prev, isOpen: false }))}
-        onSave={handleStatSave}
-        statName={modalState.statName}
-        currentValue={character.stats[modalState.statKey]}
-      />
     </CharacterSheetContainer>
   );
 };
