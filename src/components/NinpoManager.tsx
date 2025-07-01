@@ -35,7 +35,7 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
 
   return (
     <div>
-      <NinpoList>
+      <NinpoList style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}>
         {ninpo.map((n, index) => (
           <NinpoCard key={index}>
             <NinpoName>{n.name}</NinpoName>
