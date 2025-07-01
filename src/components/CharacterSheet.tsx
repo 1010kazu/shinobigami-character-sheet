@@ -57,8 +57,6 @@ const CharacterSheet: React.FC = () => {
     gender: '',
     location: '',
     abilityTable: createInitialAbilityTable(),
-    lifePoints: 0,
-    maxLifePoints: 0,
     ninpo: [],
     ninjaTools: { hyorogan: 0, jintsugan: 0, tonkofu: 0 },
     notes: ''
@@ -242,36 +240,6 @@ const CharacterSheet: React.FC = () => {
             selectedHeader={selectedHeader}
             onHeaderClick={handleHeaderClick}
           />
-        </Section>
-
-        {/* 生命力 */}
-        <Section>
-          <SectionTitle>生命力</SectionTitle>
-          <LifePointsSection>
-            <LifePointsBox>
-              <LifePointsLabel>現在の生命力</LifePointsLabel>
-              <LifePointsValue>{character.lifePoints}</LifePointsValue>
-            </LifePointsBox>
-            <FormGroup>
-              <Label>現在の生命力</Label>
-              <Input
-                type="number"
-                min="0"
-                value={character.lifePoints}
-                onChange={(e) => setCharacter(prev => ({ ...prev, lifePoints: Number(e.target.value) }))}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>最大生命力</Label>
-              <Input
-                type="number"
-                min="0"
-                value={character.maxLifePoints}
-                readOnly
-                style={{ background: '#eee' }}
-              />
-            </FormGroup>
-          </LifePointsSection>
         </Section>
 
         {/* 忍法 */}

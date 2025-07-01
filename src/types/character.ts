@@ -25,10 +25,6 @@ export interface Character {
   // 能力値
   abilityTable: AbilityCell[][]; // 12行6列の表
   
-  // 生命力
-  lifePoints: number;
-  maxLifePoints: number;
-  
   // 忍法
   ninpo: Ninpo[];
   
