@@ -35,15 +35,17 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
 
   return (
     <div>
-      <NinpoList style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}>
+      <NinpoList>
         {ninpo.map((n, index) => (
           <NinpoCard key={index}>
-            <NinpoName>{n.name}</NinpoName>
-            <div>タイプ: {n.type}</div>
-            <div>指定特技: {n.skill}</div>
-            <div>間合い: {n.range}</div>
-            <NinpoCost>コスト: {n.cost}</NinpoCost>
-            <div>効果: {n.effect}</div>
+            <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '6px' }}>{n.name}</div>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '10px', fontSize: '0.95rem', marginBottom: '6px' }}>
+              <span>タイプ: {n.type}</span>
+              <span>指定特技: {n.skill}</span>
+              <span>間合い: {n.range}</span>
+              <span>コスト: {n.cost}</span>
+            </div>
+            <div style={{ textAlign: 'left', fontSize: '0.95rem', minHeight: '2.5em', marginBottom: '8px' }}>効果: {n.effect}</div>
             <DangerButton onClick={() => handleDelete(index)}>削除</DangerButton>
           </NinpoCard>
         ))}
