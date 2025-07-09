@@ -118,7 +118,38 @@ const CharacterSheet: React.FC = () => {
   };
 
   const handleSave = () => {
-    const characterJson = JSON.stringify(character, null, 2);
+    // maxLifePointsの計算
+    const maxLifePoints = character.abilityTable.flat().filter(cell => cell.selected).length;
+
+    // たろう.json形式にマッピング
+    const exportData = {
+      basic_character_info: {
+        character_name: character.name,
+        game_system: "シノビガミ",
+        player_name: character.playerName,
+        prof_img_path: "",
+        tags: ""
+      },
+      bigami_meta_info: {
+        age: character.age,
+        gender: character.gender,
+        school: character.school,
+        rank: character.rank,
+        style: character.style,
+        publicFace: character.publicFace,
+        creed: character.creed,
+        achievement: character.achievement,
+        background: character.background,
+        rival: character.rival
+      },
+      bigami_skills: character.abilityTable,
+      ninpo: character.ninpo,
+      ninjaTools: character.ninjaTools,
+      memo: character.notes,
+      maxLifePoints: maxLifePoints
+    };
+
+    const characterJson = JSON.stringify(exportData, null, 2);
     const blob = new Blob([characterJson], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
