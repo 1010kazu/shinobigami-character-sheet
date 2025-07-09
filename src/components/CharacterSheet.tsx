@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   CharacterSheetContainer,
   SheetHeader,
@@ -84,6 +85,7 @@ const CharacterSheet: React.FC = () => {
   });
 
   const [selectedHeader, setSelectedHeader] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   // ローカルストレージからデータを読み込み
   useEffect(() => {
@@ -186,6 +188,42 @@ const CharacterSheet: React.FC = () => {
       rival: RIVAL_MAP[school],
       style: STYLE_MAP[school],
     }));
+  };
+
+  // たろう.json形式にマッピング（handleSaveの内容を参考に）
+  const getExportData = () => {
+    const maxLifePoints = character.abilityTable.flat().filter(cell => cell.selected).length;
+    return {
+      basic_character_info: {
+        character_name: character.name,
+        game_system: "シノビガミ",
+        player_name: character.playerName,
+        prof_img_path: "",
+        tags: ""
+      },
+      bigami_meta_info: {
+        age: character.age,
+        gender: character.gender,
+        school: character.school,
+        rank: character.rank,
+        style: character.style,
+        publicFace: character.publicFace,
+        creed: character.creed,
+        achievement: character.achievement,
+        background: character.background,
+        rival: character.rival
+      },
+      bigami_skills: character.abilityTable,
+      ninpo: character.ninpo,
+      ninjaTools: character.ninjaTools,
+      memo: character.notes,
+      maxLifePoints: maxLifePoints
+    };
+  };
+
+  const handleRegister = () => {
+    const exportData = getExportData();
+    navigate('/view', { state: { character: exportData } });
   };
 
   return (
@@ -352,6 +390,7 @@ const CharacterSheet: React.FC = () => {
         {/* 操作ボタン */}
         <Section>
           <ButtonGroup>
+            <Button onClick={handleRegister}>登録</Button>
             <Button onClick={handleSave}>JSONとして保存</Button>
             <Button as="label" htmlFor="load-file">
               ファイルから読み込み
