@@ -71,6 +71,7 @@ const CharacterSheet: React.FC = () => {
     age: 0,
     gender: '',
     school: '斜歯忍軍',
+    subSchool: '', // 下位流派の初期値
     rank: '中忍',
     style: STYLE_MAP['斜歯忍軍'],
     publicFace: '',
@@ -136,6 +137,7 @@ const CharacterSheet: React.FC = () => {
         age: character.age,
         gender: character.gender,
         school: character.school,
+        subSchool: character.subSchool, // 下位流派
         rank: character.rank,
         style: character.style,
         publicFace: character.publicFace,
@@ -170,7 +172,10 @@ const CharacterSheet: React.FC = () => {
       reader.onload = (e) => {
         try {
           const loadedCharacter = JSON.parse(e.target?.result as string);
-          setCharacter(loadedCharacter);
+          setCharacter({
+            ...loadedCharacter,
+            subSchool: loadedCharacter.subSchool || '', // 下位流派の後方互換
+          });
         } catch (error) {
           console.error('Failed to parse character file:', error);
           alert('キャラクターシートの読み込みに失敗しました。');
@@ -205,6 +210,7 @@ const CharacterSheet: React.FC = () => {
         age: character.age,
         gender: character.gender,
         school: character.school,
+        subSchool: character.subSchool, // 下位流派
         rank: character.rank,
         style: character.style,
         publicFace: character.publicFace,
@@ -283,6 +289,14 @@ const CharacterSheet: React.FC = () => {
               </select>
             </FormGroup>
             <FormGroup>
+              <Label>下位流派</Label>
+              <Input
+                value={character.subSchool}
+                onChange={(e) => setCharacter(prev => ({ ...prev, subSchool: e.target.value }))}
+                placeholder="下位流派"
+              />
+            </FormGroup>
+            <FormGroup>
               <Label>階級</Label>
               <Input
                 value={character.rank}
@@ -294,8 +308,6 @@ const CharacterSheet: React.FC = () => {
               <Label>流儀</Label>
               <Input
                 value={character.style}
-                readOnly
-                style={{ background: '#eee' }}
                 onChange={(e) => setCharacter(prev => ({ ...prev, style: e.target.value }))}
                 placeholder="流儀"
               />

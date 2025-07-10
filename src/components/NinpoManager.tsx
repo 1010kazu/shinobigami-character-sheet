@@ -88,8 +88,8 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
               <Input
                 type="number"
                 min="0"
-                value={newNinpo.range || ''}
-                onChange={(e) => setNewNinpo({ ...newNinpo, range: Number(e.target.value) })}
+                value={newNinpo.range ?? 0}
+                onChange={(e) => setNewNinpo({ ...newNinpo, range: Math.max(0, Number(e.target.value)) })}
                 placeholder="間合いを入力"
               />
             </FormGroup>
@@ -98,8 +98,8 @@ const NinpoManager: React.FC<NinpoManagerProps> = ({ ninpo, onUpdate }) => {
               <Input
                 type="number"
                 min="0"
-                value={newNinpo.cost || ''}
-                onChange={(e) => setNewNinpo({ ...newNinpo, cost: Number(e.target.value) })}
+                value={newNinpo.cost ?? 0}
+                onChange={(e) => setNewNinpo({ ...newNinpo, cost: Math.max(0, Number(e.target.value)) })}
                 placeholder="コストを入力"
               />
             </FormGroup>

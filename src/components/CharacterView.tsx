@@ -50,6 +50,10 @@ const CharacterView: React.FC = () => {
               <Input value={character.bigami_meta_info.school} readOnly />
             </FormGroup>
             <FormGroup>
+              <Label>下位流派</Label>
+              <Input value={character.bigami_meta_info.subSchool || ''} readOnly />
+            </FormGroup>
+            <FormGroup>
               <Label>階級</Label>
               <Input value={character.bigami_meta_info.rank} readOnly />
             </FormGroup>

@@ -18,6 +18,7 @@ export interface Character {
   age: number;
   gender: string;
   school: School;
+  subSchool: string; // 下位流派
   rank: string;
   style: string; // 流儀
   publicFace: string;
